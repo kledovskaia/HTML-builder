@@ -9,14 +9,17 @@ fs.link(filePath, filePath, () => {
     const writeStream = new fs.WriteStream(filePath)
     stdin.on('data', (chunk) => {
         if (chunk.toString().trim() === 'exit') { 
-            process.exit()
+            process.exit(0)
         } else {
             writeStream.write(chunk)
         }
     })
 })
 
-process.on('SIGINT', process.exit)
+process.on('SIGINT', () => {
+    stdout.write('\n')
+    process.exit(0)
+})
 
 process.on('exit', (statusCode) => {
     if (!statusCode) stdout.write('Have a nice day!\n')
